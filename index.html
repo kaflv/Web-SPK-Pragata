@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SPK Pemilihan Mobil — SAW, WP, SMART, MOORA, AHP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --orange:#FF6B2C;--yellow:#FFD23F;--teal:#00C9A7;--violet:#7B5EA7;--pink:#FF4D8F;--cyan:#00E5FF;--blue:#4F8EF7;
+  --bg:#0F0F13;--surface:#1A1A22;--card:#22222E;--border:#2E2E3E;--text:#F0EFF8;--muted:#8A89A0;--radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* SIDEBAR NAV */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.sidebar-logo h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;
+  background:linear-gradient(120deg,var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sidebar-logo p{font-size:11px;color:var(--muted);margin-top:2px;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 20px;margin:14px 0 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;font-weight:500;cursor:pointer;
+  transition:background .15s,color .15s;color:var(--muted);border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
+.nav-item.active{background:rgba(255,107,44,.1);color:var(--orange);border-left-color:var(--orange);}
+.nav-item .icon{width:16px;text-align:center;font-size:14px;}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:32px 32px 80px;min-width:0;}
+
+/* PAGE */
+.page{display:none;}
+.page.active{display:block;}
+
+/* HERO STRIP */
+.hero-strip{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 28px 22px;margin-bottom:24px;position:relative;overflow:hidden;}
+.hero-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--yellow),var(--teal));}
+.hero-strip h1{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;
+  background:linear-gradient(120deg,var(--orange),var(--yellow),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-strip p{color:var(--muted);font-size:13px;margin-top:4px;}
+.hero-strip .meta{font-size:12px;color:#555568;margin-top:6px;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:18px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.card.orange::before{background:linear-gradient(90deg,var(--orange),var(--yellow));}
+.card.teal::before  {background:linear-gradient(90deg,var(--teal),var(--cyan));}
+.card.violet::before{background:linear-gradient(90deg,var(--violet),var(--pink));}
+.card.pink::before  {background:linear-gradient(90deg,var(--pink),var(--orange));}
+.card.yellow::before{background:linear-gradient(90deg,var(--yellow),var(--teal));}
+.card.blue::before  {background:linear-gradient(90deg,var(--blue),var(--cyan));}
+.card.cyan::before  {background:linear-gradient(90deg,var(--cyan),var(--violet));}
+.card-label{font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.card.orange .card-label{color:var(--orange);}
+.card.teal   .card-label{color:var(--teal);}
+.card.violet .card-label{color:var(--violet);}
+.card.pink   .card-label{color:var(--pink);}
+.card.yellow .card-label{color:var(--yellow);}
+.card.blue   .card-label{color:var(--blue);}
+.card.cyan   .card-label{color:var(--cyan);}
+.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px;}
+
+/* STAT BOXES */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:20px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;}
+.stat-num.orange{color:var(--orange);}
+.stat-num.teal  {color:var(--teal);}
+.stat-num.violet{color:var(--violet);}
+.stat-num.pink  {color:var(--pink);}
+.stat-num.blue  {color:var(--blue);}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:rgba(255,255,255,.04);}
+th{padding:10px 13px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.05em;white-space:nowrap;}
+td{padding:9px 13px;border-top:1px solid var(--border);vertical-align:middle;}
+tr:hover td{background:rgba(255,255,255,.02);}
+
+/* FORM */
+input,select,textarea{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:8px;
+  padding:8px 11px;font-size:13px;font-family:inherit;width:100%;transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--orange);}
+input[type=number]{-moz-appearance:textfield;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group label{font-size:12px;color:var(--muted);font-weight:600;}
+.form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:9px;padding:9px 18px;
+  font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .12s;}
+.btn:hover{opacity:.88;transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#FF8F50);color:#fff;}
+.btn-teal  {background:linear-gradient(135deg,var(--teal),var(--cyan));color:#0F0F13;}
+.btn-violet{background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;}
+.btn-blue  {background:linear-gradient(135deg,var(--blue),var(--cyan));color:#0F0F13;}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow),var(--teal));color:#0F0F13;}
+.btn-ghost {background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-red   {background:rgba(255,77,143,.15);border:1px solid rgba(255,77,143,.3);color:var(--pink);font-size:12px;padding:6px 12px;}
+.btn-sm    {padding:6px 13px;font-size:12px;}
+.btn-row   {display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+
+/* BADGE */
+.badge{display:inline-block;font-size:11px;font-weight:600;border-radius:6px;padding:3px 9px;}
+.badge-benefit{background:rgba(0,201,167,.15);color:var(--teal);}
+.badge-cost   {background:rgba(255,77,143,.15);color:var(--pink);}
+
+/* BOBOT INFO */
+.bobot-info{font-size:12.5px;margin-top:10px;padding:8px 12px;border-radius:8px;display:inline-block;}
+.bobot-ok  {background:rgba(0,201,167,.12);color:var(--teal);}
+.bobot-warn{background:rgba(255,107,44,.12);color:var(--orange);}
+
+/* FORMULA */
+.formula{background:rgba(255,255,255,.03);border-left:3px solid var(--violet);border-radius:0 8px 8px 0;
+  padding:9px 13px;font-family:'Courier New',monospace;font-size:12px;color:var(--muted);margin-bottom:12px;}
+
+/* RESULT REK */
+.rek-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.rek-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;}
+.rek-box.saw   {border-color:rgba(255,107,44,.4);}
+.rek-box.wp    {border-color:rgba(123,94,167,.4);}
+.rek-box.smart {border-color:rgba(0,201,167,.4);}
+.rek-box.moora {border-color:rgba(255,210,63,.4);}
+.rek-box.ahp   {border-color:rgba(79,142,247,.4);}
+.rek-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:6px;}
+.rek-box.saw   .rek-label{color:var(--orange);}
+.rek-box.wp    .rek-label{color:var(--violet);}
+.rek-box.smart .rek-label{color:var(--teal);}
+.rek-box.moora .rek-label{color:var(--yellow);}
+.rek-box.ahp   .rek-label{color:var(--blue);}
+.rek-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;}
+.rek-box.saw   .rek-name{background:linear-gradient(120deg,var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rek-box.wp    .rek-name{background:linear-gradient(120deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rek-box.smart .rek-name{background:linear-gradient(120deg,var(--teal),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rek-box.moora .rek-name{background:linear-gradient(120deg,var(--yellow),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rek-box.ahp   .rek-name{background:linear-gradient(120deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rek-score{color:var(--muted);font-size:11px;margin-top:3px;}
+
+/* RANK */
+.rank-1 td:first-child{color:var(--yellow);font-weight:700;}
+.rank-2 td:first-child{color:var(--muted);font-weight:600;}
+.rank-3 td:first-child{color:#CD7F32;font-weight:600;}
+.bar-cell{display:flex;align-items:center;gap:8px;}
+.bar-fill{height:5px;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--orange));min-width:3px;}
+
+/* TABS */
+.tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;}
+.tab-btn{padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;background:none;border:none;
+  color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* METHOD TOGGLE */
+.method-toggle-grid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.mtog{padding:8px 18px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .2s;user-select:none;}
+.mtog.saw  {background:rgba(255,107,44,.12);border-color:rgba(255,107,44,.3);color:var(--orange);}
+.mtog.wp   {background:rgba(123,94,167,.12);border-color:rgba(123,94,167,.3);color:var(--violet);}
+.mtog.smart{background:rgba(0,201,167,.12);border-color:rgba(0,201,167,.3);color:var(--teal);}
+.mtog.moora{background:rgba(255,210,63,.12);border-color:rgba(255,210,63,.3);color:var(--yellow);}
+.mtog.ahp  {background:rgba(79,142,247,.12);border-color:rgba(79,142,247,.3);color:var(--blue);}
+.mtog.on.saw  {background:var(--orange);color:#fff;border-color:var(--orange);}
+.mtog.on.wp   {background:var(--violet);color:#fff;border-color:var(--violet);}
+.mtog.on.smart{background:var(--teal);color:#0F0F13;border-color:var(--teal);}
+.mtog.on.moora{background:var(--yellow);color:#0F0F13;border-color:var(--yellow);}
+.mtog.on.ahp  {background:var(--blue);color:#0F0F13;border-color:var(--blue);}
+
+/* RIWAYAT */
+.riwayat-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s;}
+.riwayat-item:hover{border-color:var(--orange);}
+.riwayat-info h4{font-size:13px;font-weight:600;margin-bottom:3px;}
+.riwayat-info p{font-size:11px;color:var(--muted);}
+.riwayat-meta{text-align:right;flex-shrink:0;}
+.riwayat-meta .time{font-size:11px;color:var(--muted);}
+.riwayat-meta .methods{font-size:11px;color:var(--orange);font-weight:600;margin-top:2px;}
+
+.log-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);}
+.log-item:last-child{border-bottom:none;}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.log-dot.add   {background:var(--teal);}
+.log-dot.edit  {background:var(--yellow);}
+.log-dot.delete{background:var(--pink);}
+.log-dot.calc  {background:var(--orange);}
+.log-text{font-size:12.5px;}
+.log-time{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* AHP MATRIX */
+.ahp-matrix-wrap{overflow-x:auto;}
+.ahp-matrix-wrap input{width:72px;text-align:center;}
+.ahp-note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.6;}
+.cr-badge{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;margin-top:10px;}
+.cr-ok  {background:rgba(0,201,167,.15);color:var(--teal);}
+.cr-warn{background:rgba(255,77,143,.15);color:var(--pink);}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:13px;}
+.empty-icon{font-size:2.5rem;margin-bottom:10px;}
+
+/* SECTION HDR */
+.sec-hdr{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin:18px 0 10px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:90%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.modal h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:18px;}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+
+/* ALERT */
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;}
+.alert-warn{background:rgba(255,107,44,.12);border:1px solid rgba(255,107,44,.3);color:var(--orange);}
+.alert-ok  {background:rgba(0,201,167,.12);border:1px solid rgba(0,201,167,.3);color:var(--teal);}
+
+@media(max-width:720px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;padding:16px 14px 60px;}
+  .form-row,.form-row-3{grid-template-columns:1fr;}
+  .hamburger{display:flex;}
+}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:300;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:16px;}
+</style>
+</head>
+<body>
+
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h2>SPK Mobil</h2>
+    <p>Pragata Azis Pratama</p>
+    <p style="font-size:10px;color:#444460">NIM: 231011401755</p>
+  </div>
+  <div class="nav-section">Menu</div>
+  <div class="nav-item active" onclick="goPage('dashboard')"><span class="icon">🏠</span> Dashboard</div>
+  <div class="nav-section">Data Master</div>
+  <div class="nav-item" onclick="goPage('kriteria')"><span class="icon">📋</span> Kriteria</div>
+  <div class="nav-item" onclick="goPage('alternatif')"><span class="icon">🚗</span> Alternatif Mobil</div>
+  <div class="nav-section">Perhitungan</div>
+  <div class="nav-item" onclick="goPage('hitung')"><span class="icon">⚡</span> Hitung SPK</div>
+  <div class="nav-section">Riwayat</div>
+  <div class="nav-item" onclick="goPage('riwayat-hasil')"><span class="icon">📊</span> Riwayat Hasil</div>
+  <div class="nav-item" onclick="goPage('riwayat-log')"><span class="icon">📝</span> Log Aktivitas</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════ DASHBOARD ═══════ -->
+<div class="page active" id="page-dashboard">
+  <div class="hero-strip">
+    <h1>Sistem Pendukung Keputusan</h1>
+    <p>Pemilihan Mobil Terbaik — SAW · WP · SMART · MOORA · AHP</p>
+    <div class="meta">Nama: Pragata Azis Pratama &nbsp;—&nbsp; NIM: 231011401755</div>
+  </div>
+  <div class="stats-grid" id="dash-stats"></div>
+  <div class="card blue">
+    <div class="card-label">Panduan</div>
+    <div class="card-title">Cara Penggunaan</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.9;">
+      <b style="color:var(--text)">1. Tambah Kriteria</b> — Masukkan kriteria penilaian mobil beserta bobot & jenisnya (Benefit/Cost).<br>
+      <b style="color:var(--text)">2. Tambah Alternatif</b> — Masukkan data mobil yang akan dibandingkan.<br>
+      <b style="color:var(--text)">3. Hitung SPK</b> — Pilih metode yang diinginkan lalu klik Hitung.<br>
+      <b style="color:var(--text)">4. Lihat Riwayat</b> — Semua hasil & aktivitas tersimpan otomatis.
+    </div>
+  </div>
+  <div class="card orange">
+    <div class="card-label">Riwayat Terbaru</div>
+    <div class="card-title">Perhitungan Terakhir</div>
+    <div id="dash-recent"></div>
+  </div>
+</div>
+
+<!-- ═══════ KRITERIA ═══════ -->
+<div class="page" id="page-kriteria">
+  <div class="hero-strip">
+    <h1>Manajemen Kriteria</h1>
+    <p>Tambah, edit, atau hapus kriteria penilaian mobil.</p>
+  </div>
+  <div class="card orange">
+    <div class="card-label">Tambah Kriteria Baru</div>
+    <div class="card-title">Form Input Kriteria</div>
+    <div id="alert-kriteria"></div>
+    <div class="form-row-3">
+      <div class="form-group"><label>Kode Kriteria</label><input id="k-kode" placeholder="C1, C2, ..."/></div>
+      <div class="form-group"><label>Bobot (0–1)</label><input id="k-bobot" type="number" min="0" max="1" step="0.01" placeholder="0.25"/></div>
+      <div class="form-group"><label>Jenis</label><select id="k-jenis"><option value="benefit">Benefit ↑</option><option value="cost">Cost ↓</option></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px"><label>Nama Kriteria</label><input id="k-nama" placeholder="Contoh: Harga, Konsumsi BBM, ..."/></div>
+    <div id="bobot-status" class="bobot-info bobot-ok" style="margin-bottom:12px"></div>
+    <div class="btn-row">
+      <button class="btn btn-orange" onclick="simpanKriteria()">💾 Simpan Kriteria</button>
+    </div>
+  </div>
+  <div class="card teal">
+    <div class="card-label">Data Tersimpan</div>
+    <div class="card-title">Daftar Kriteria</div>
+    <div class="tbl-wrap" id="tbl-kriteria-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════ ALTERNATIF ═══════ -->
+<div class="page" id="page-alternatif">
+  <div class="hero-strip">
+    <h1>Data Alternatif Mobil</h1>
+    <p>Tambah atau kelola data mobil yang akan dinilai.</p>
+  </div>
+  <div class="card teal">
+    <div class="card-label">Tambah Alternatif Baru</div>
+    <div class="card-title">Form Input Mobil</div>
+    <div id="alert-alt"></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Nama Mobil</label><input id="a-nama" placeholder="Contoh: Toyota Avanza"/></div>
+    <div id="a-nilai-grid"></div>
+    <div class="btn-row">
+      <button class="btn btn-teal" onclick="simpanAlt()">💾 Simpan Mobil</button>
+    </div>
+  </div>
+  <div class="card orange">
+    <div class="card-label">Data Tersimpan</div>
+    <div class="card-title">Daftar Alternatif Mobil</div>
+    <div class="tbl-wrap" id="tbl-alt-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════ HITUNG ═══════ -->
+<div class="page" id="page-hitung">
+  <div class="hero-strip">
+    <h1>Hitung SPK</h1>
+    <p>Pilih metode lalu jalankan perhitungan.</p>
+  </div>
+  <div class="card violet">
+    <div class="card-label">Langkah 1</div>
+    <div class="card-title">Pilih Metode Perhitungan</div>
+    <div class="method-toggle-grid">
+      <div class="mtog saw on"   onclick="togM('saw',this)">SAW</div>
+      <div class="mtog wp  on"   onclick="togM('wp',this)">Weighted Product</div>
+      <div class="mtog smart on" onclick="togM('smart',this)">SMART</div>
+      <div class="mtog moora on" onclick="togM('moora',this)">MOORA</div>
+      <div class="mtog ahp on"   onclick="togM('ahp',this)">AHP</div>
+    </div>
+    <div id="ahp-section" style="margin-top:14px;">
+      <div class="alert alert-warn">⚠ AHP aktif: isi matriks perbandingan berpasangan antar kriteria di bawah sebelum menghitung.</div>
+      <div id="ahp-matrix-container"></div>
+      <div id="ahp-cr-result"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-violet" onclick="hitungSPK()">⚡ Jalankan Perhitungan</button>
+    </div>
+  </div>
+  <div id="hasil-section" style="display:none">
+    <div class="rek-grid" id="rek-grid"></div>
+    <div class="tab-nav" id="result-tab-nav"></div>
+    <div id="result-tab-content"></div>
+  </div>
+</div>
+
+<!-- ═══════ RIWAYAT HASIL ═══════ -->
+<div class="page" id="page-riwayat-hasil">
+  <div class="hero-strip">
+    <h1>Riwayat Hasil Perhitungan</h1>
+    <p>Semua hasil perhitungan tersimpan dan dapat dibuka kembali.</p>
+  </div>
+  <div class="card pink">
+    <div class="card-label">Semua Sesi</div>
+    <div class="card-title">Daftar Hasil Tersimpan</div>
+    <div class="btn-row" style="margin-top:0;margin-bottom:14px">
+      <button class="btn btn-red btn-sm" onclick="clearRiwayat()">🗑 Hapus Semua Riwayat</button>
+    </div>
+    <div id="riwayat-list"></div>
+  </div>
+</div>
+
+<!-- ═══════ LOG AKTIVITAS ═══════ -->
+<div class="page" id="page-riwayat-log">
+  <div class="hero-strip">
+    <h1>Log Aktivitas</h1>
+    <p>Rekaman semua aksi: tambah, edit, hapus, dan perhitungan.</p>
+  </div>
+  <div class="card cyan">
+    <div class="card-label">Semua Aktivitas</div>
+    <div class="card-title">Log Sistem</div>
+    <div class="btn-row" style="margin-top:0;margin-bottom:14px">
+      <button class="btn btn-red btn-sm" onclick="clearLog()">🗑 Hapus Log</button>
+    </div>
+    <div id="log-list"></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- MODAL EDIT KRITERIA -->
+<div class="modal-overlay" id="modal-edit-k">
+  <div class="modal">
+    <h3>✏️ Edit Kriteria</h3>
+    <input type="hidden" id="edit-k-id"/>
+    <div class="form-group" style="margin-bottom:12px"><label>Kode</label><input id="edit-k-kode"/></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Nama</label><input id="edit-k-nama"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Bobot</label><input id="edit-k-bobot" type="number" min="0" max="1" step="0.01"/></div>
+      <div class="form-group"><label>Jenis</label><select id="edit-k-jenis"><option value="benefit">Benefit</option><option value="cost">Cost</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-k')">Batal</button>
+      <button class="btn btn-orange" onclick="updateKriteria()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT ALT -->
+<div class="modal-overlay" id="modal-edit-a">
+  <div class="modal">
+    <h3>✏️ Edit Alternatif</h3>
+    <input type="hidden" id="edit-a-id"/>
+    <div class="form-group" style="margin-bottom:12px"><label>Nama Mobil</label><input id="edit-a-nama"/></div>
+    <div id="edit-a-nilai"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-a')">Batal</button>
+      <button class="btn btn-teal" onclick="updateAlt()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL RIWAYAT -->
+<div class="modal-overlay" id="modal-riwayat">
+  <div class="modal" style="max-width:800px">
+    <h3 id="modal-riwayat-title">Detail Hasil</h3>
+    <div id="modal-riwayat-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-riwayat')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════ DB (localStorage) ═══════
+const DB={
+  get(k){try{return JSON.parse(localStorage.getItem('spk_'+k))||[];}catch{return [];}},
+  set(k,v){localStorage.setItem('spk_'+k,JSON.stringify(v));},
+  getObj(k,def={}){try{return JSON.parse(localStorage.getItem('spk_'+k))||def;}catch{return def;}},
+  setObj(k,v){localStorage.setItem('spk_'+k,JSON.stringify(v));}
+};
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function now(){return new Date().toLocaleString('id-ID');}
+
+// ═══════ LOG ═══════
+function addLog(type,text){
+  const logs=DB.get('logs');
+  logs.unshift({id:uid(),type,text,time:now()});
+  if(logs.length>200)logs.pop();
+  DB.set('logs',logs);
+}
+
+// ═══════ NAVIGATION ═══════
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')?.includes(id))n.classList.add('active');
+  });
+  if(id==='dashboard')renderDashboard();
+  if(id==='kriteria'){renderKriteriaTable();renderAltNilaiGrid();updateBobotStatus();}
+  if(id==='alternatif'){renderAltTable();renderAltNilaiGrid();}
+  if(id==='hitung'){renderAhpMatrix();}
+  if(id==='riwayat-hasil')renderRiwayat();
+  if(id==='riwayat-log')renderLog();
+  if(window.innerWidth<=720)document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+
+// ═══════ DASHBOARD ═══════
+function renderDashboard(){
+  const K=DB.get('kriteria'),A=DB.get('alternatif'),R=DB.get('riwayat'),L=DB.get('logs');
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat-box"><div class="stat-num orange">${K.length}</div><div class="stat-label">Kriteria</div></div>
+    <div class="stat-box"><div class="stat-num teal">${A.length}</div><div class="stat-label">Alternatif Mobil</div></div>
+    <div class="stat-box"><div class="stat-num violet">${R.length}</div><div class="stat-label">Riwayat Perhitungan</div></div>
+    <div class="stat-box"><div class="stat-num pink">${L.length}</div><div class="stat-label">Log Aktivitas</div></div>`;
+  if(!R.length){document.getElementById('dash-recent').innerHTML='<div class="empty"><div class="empty-icon">📊</div>Belum ada perhitungan.</div>';return;}
+  const r=R[0];
+  document.getElementById('dash-recent').innerHTML=`
+    <div class="riwayat-item" onclick="openRiwayat('${r.id}')">
+      <div class="riwayat-info"><h4>${r.label}</h4><p>${r.alt} alternatif · ${r.krit} kriteria</p></div>
+      <div class="riwayat-meta"><div class="time">${r.time}</div><div class="methods">${r.methods.join(' · ')}</div></div>
+    </div>`;
+}
+
+// ═══════ KRITERIA ═══════
+function updateBobotStatus(){
+  const K=DB.get('kriteria');
+  const t=K.reduce((s,k)=>s+k.bobot,0);
+  const ok=Math.abs(t-1)<.001;
+  const el=document.getElementById('bobot-status');
+  if(el)el.textContent=`Total bobot sekarang: ${t.toFixed(3)} ${ok?'✓ Sudah pas 1.00':'⚠ Harus = 1.00'}`,el.className='bobot-info '+(ok?'bobot-ok':'bobot-warn');
+}
+function simpanKriteria(){
+  const kode=document.getElementById('k-kode').value.trim();
+  const nama=document.getElementById('k-nama').value.trim();
+  const bobot=parseFloat(document.getElementById('k-bobot').value)||0;
+  const jenis=document.getElementById('k-jenis').value;
+  if(!kode||!nama){showAlert('alert-kriteria','Kode dan Nama kriteria wajib diisi!','warn');return;}
+  if(bobot<=0||bobot>1){showAlert('alert-kriteria','Bobot harus antara 0.01 – 1.00!','warn');return;}
+  const K=DB.get('kriteria');
+  if(K.find(k=>k.kode===kode)){showAlert('alert-kriteria',`Kode "${kode}" sudah ada!`,'warn');return;}
+  const item={id:uid(),kode,nama,bobot,jenis};
+  K.push(item);
+  DB.set('kriteria',K);
+  addLog('add',`Kriteria ditambahkan: ${kode} - ${nama} (bobot: ${bobot}, ${jenis})`);
+  showAlert('alert-kriteria',`Kriteria "${nama}" berhasil disimpan!`,'ok');
+  document.getElementById('k-kode').value='';
+  document.getElementById('k-nama').value='';
+  document.getElementById('k-bobot').value='';
+  renderKriteriaTable();renderAltNilaiGrid();updateBobotStatus();
+}
+function renderKriteriaTable(){
+  const K=DB.get('kriteria');
+  const wrap=document.getElementById('tbl-kriteria-wrap');
+  if(!K.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Belum ada kriteria.</div>';return;}
+  let rows=K.map(k=>`<tr>
+    <td>${k.kode}</td><td>${k.nama}</td><td>${k.bobot}</td>
+    <td><span class="badge badge-${k.jenis}">${k.jenis}</span></td>
+    <td style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="openEditK('${k.id}')">✏️</button>
+      <button class="btn btn-red" onclick="hapusK('${k.id}')">✕</button>
+    </td></tr>`).join('');
+  wrap.innerHTML=`<table><thead><tr><th>Kode</th><th>Nama Kriteria</th><th>Bobot</th><th>Jenis</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function hapusK(id){
+  if(!confirm('Hapus kriteria ini? Data alternatif yang sudah diinput mungkin perlu diperbarui.'))return;
+  const K=DB.get('kriteria');
+  const k=K.find(x=>x.id===id);
+  DB.set('kriteria',K.filter(x=>x.id!==id));
+  addLog('delete',`Kriteria dihapus: ${k?.kode} - ${k?.nama}`);
+  renderKriteriaTable();renderAltNilaiGrid();updateBobotStatus();
+}
+function openEditK(id){
+  const k=DB.get('kriteria').find(x=>x.id===id);
+  if(!k)return;
+  document.getElementById('edit-k-id').value=id;
+  document.getElementById('edit-k-kode').value=k.kode;
+  document.getElementById('edit-k-nama').value=k.nama;
+  document.getElementById('edit-k-bobot').value=k.bobot;
+  document.getElementById('edit-k-jenis').value=k.jenis;
+  document.getElementById('modal-edit-k').classList.add('show');
+}
+function updateKriteria(){
+  const id=document.getElementById('edit-k-id').value;
+  const K=DB.get('kriteria');
+  const idx=K.findIndex(x=>x.id===id);
+  if(idx<0)return;
+  K[idx]={...K[idx],kode:document.getElementById('edit-k-kode').value.trim(),
+    nama:document.getElementById('edit-k-nama').value.trim(),
+    bobot:parseFloat(document.getElementById('edit-k-bobot').value)||0,
+    jenis:document.getElementById('edit-k-jenis').value};
+  DB.set('kriteria',K);
+  addLog('edit',`Kriteria diperbarui: ${K[idx].kode} - ${K[idx].nama}`);
+  closeModal('modal-edit-k');
+  renderKriteriaTable();updateBobotStatus();
+}
+
+// ═══════ ALTERNATIF ═══════
+function renderAltNilaiGrid(){
+  const K=DB.get('kriteria');
+  ['a-nilai-grid','edit-a-nilai'].forEach(gid=>{
+    const g=document.getElementById(gid);
+    if(!g)return;
+    if(!K.length){g.innerHTML='<div class="alert alert-warn">⚠ Tambah kriteria terlebih dahulu sebelum input nilai.</div>';return;}
+    g.innerHTML=K.map(k=>`
+      <div class="form-group" style="margin-bottom:10px">
+        <label>${k.kode} — ${k.nama} <span style="color:var(--muted)">(${k.jenis})</span></label>
+        <input type="number" id="${gid}-val-${k.id}" placeholder="Nilai..." min="0" step="any"/>
+      </div>`).join('');
+  });
+}
+function simpanAlt(){
+  const nama=document.getElementById('a-nama').value.trim();
+  if(!nama){showAlert('alert-alt','Nama mobil wajib diisi!','warn');return;}
+  const K=DB.get('kriteria');
+  if(!K.length){showAlert('alert-alt','Tambah kriteria dulu sebelum input alternatif!','warn');return;}
+  const nilai={};
+  for(const k of K){
+    const v=parseFloat(document.getElementById('a-nilai-grid-val-'+k.id).value);
+    if(isNaN(v)||v<0){showAlert('alert-alt',`Nilai untuk "${k.nama}" tidak valid!`,'warn');return;}
+    nilai[k.id]=v;
+  }
+  const A=DB.get('alternatif');
+  const item={id:uid(),nama,nilai};
+  A.push(item);
+  DB.set('alternatif',A);
+  addLog('add',`Alternatif ditambahkan: ${nama}`);
+  showAlert('alert-alt',`Mobil "${nama}" berhasil disimpan!`,'ok');
+  document.getElementById('a-nama').value='';
+  K.forEach(k=>{const el=document.getElementById('a-nilai-grid-val-'+k.id);if(el)el.value='';});
+  renderAltTable();
+}
+function renderAltTable(){
+  const A=DB.get('alternatif'),K=DB.get('kriteria');
+  const wrap=document.getElementById('tbl-alt-wrap');
+  if(!A.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">🚗</div>Belum ada alternatif mobil.</div>';return;}
+  const head=`<th>No</th><th>Nama Mobil</th>${K.map(k=>`<th>${k.kode}</th>`).join('')}<th>Aksi</th>`;
+  const rows=A.map((a,i)=>`<tr>
+    <td style="color:var(--muted)">${i+1}</td><td>${a.nama}</td>
+    ${K.map(k=>`<td>${a.nilai[k.id]??'-'}</td>`).join('')}
+    <td style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="openEditA('${a.id}')">✏️</button>
+      <button class="btn btn-red" onclick="hapusA('${a.id}')">✕</button>
+    </td></tr>`).join('');
+  wrap.innerHTML=`<table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+function hapusA(id){
+  if(!confirm('Hapus alternatif ini?'))return;
+  const A=DB.get('alternatif');
+  const a=A.find(x=>x.id===id);
+  DB.set('alternatif',A.filter(x=>x.id!==id));
+  addLog('delete',`Alternatif dihapus: ${a?.nama}`);
+  renderAltTable();
+}
+function openEditA(id){
+  const A=DB.get('alternatif'),K=DB.get('kriteria');
+  const a=A.find(x=>x.id===id);
+  if(!a)return;
+  document.getElementById('edit-a-id').value=id;
+  document.getElementById('edit-a-nama').value=a.nama;
+  renderAltNilaiGrid();
+  setTimeout(()=>{
+    K.forEach(k=>{
+      const el=document.getElementById('edit-a-nilai-val-'+k.id);
+      if(el)el.value=a.nilai[k.id]??'';
+    });
+  },50);
+  document.getElementById('modal-edit-a').classList.add('show');
+}
+function updateAlt(){
+  const id=document.getElementById('edit-a-id').value;
+  const K=DB.get('kriteria'),A=DB.get('alternatif');
+  const idx=A.findIndex(x=>x.id===id);
+  if(idx<0)return;
+  const nilai={};
+  for(const k of K){
+    const v=parseFloat(document.getElementById('edit-a-nilai-val-'+k.id).value);
+    nilai[k.id]=isNaN(v)?0:v;
+  }
+  A[idx]={...A[idx],nama:document.getElementById('edit-a-nama').value.trim(),nilai};
+  DB.set('alternatif',A);
+  addLog('edit',`Alternatif diperbarui: ${A[idx].nama}`);
+  closeModal('modal-edit-a');
+  renderAltTable();
+}
+
+// ═══════ AHP MATRIX ═══════
+let activeMeth={saw:true,wp:true,smart:true,moora:true,ahp:true};
+function togM(m,el){
+  activeMeth[m]=!activeMeth[m];
+  el.classList.toggle('on',activeMeth[m]);
+  if(m==='ahp')document.getElementById('ahp-section').style.display=activeMeth.ahp?'block':'none';
+}
+function renderAhpMatrix(){
+  const K=DB.get('kriteria');
+  const sec=document.getElementById('ahp-section');
+  sec.style.display=activeMeth.ahp?'block':'none';
+  if(!K.length){document.getElementById('ahp-matrix-container').innerHTML='<div class="alert alert-warn">⚠ Tambah kriteria dulu.</div>';return;}
+  const saved=DB.getObj('ahp-matrix');
+  let html=`<div class="ahp-matrix-wrap"><table><thead><tr><th>—</th>${K.map(k=>`<th>${k.kode}</th>`).join('')}</tr></thead><tbody>`;
+  K.forEach((kr,i)=>{
+    html+=`<tr><td style="font-weight:600;color:var(--muted)">${kr.kode}</td>`;
+    K.forEach((kc,j)=>{
+      const key=`${i}_${j}`;
+      let val=i===j?1:saved[key]??'';
+      const ro=i===j?'readonly style="background:rgba(255,255,255,.04);text-align:center"':'style="text-align:center"';
+      html+=`<td><input type="number" id="ahp_${i}_${j}" value="${val}" min="0.0001" step="0.01" ${ro} onchange="saveAhpCell(${i},${j})"/></td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody></table></div>
+    <div class="ahp-note">Isi nilai perbandingan: 1=sama, 3=sedikit lebih, 5=lebih, 7=sangat lebih, 9=mutlak lebih. Kebalikan otomatis.</div>
+    <button class="btn btn-blue btn-sm" style="margin-top:10px" onclick="autoFillReciprocal()">🔄 Auto Kebalikan</button>`;
+  document.getElementById('ahp-matrix-container').innerHTML=html;
+}
+function saveAhpCell(i,j){
+  const K=DB.get('kriteria');
+  const m=DB.getObj('ahp-matrix');
+  const v=parseFloat(document.getElementById(`ahp_${i}_${j}`).value)||1;
+  m[`${i}_${j}`]=v;
+  DB.setObj('ahp-matrix',m);
+}
+function autoFillReciprocal(){
+  const K=DB.get('kriteria');
+  const m=DB.getObj('ahp-matrix');
+  K.forEach((_,i)=>K.forEach((_,j)=>{
+    if(i!==j&&m[`${i}_${j}`]){
+      m[`${j}_${i}`]=1/m[`${i}_${j}`];
+      const el=document.getElementById(`ahp_${j}_${i}`);
+      if(el)el.value=(1/m[`${i}_${j}`]).toFixed(4);
+    }
+  }));
+  DB.setObj('ahp-matrix',m);
+}
+
+// ═══════ HELPERS ═══════
+function mkTable(headers,rows,rowCls){
+  const h=headers.map(x=>`<th>${x}</th>`).join('');
+  const r=rows.map((row,i)=>{const c=row.map(x=>`<td>${x}</td>`).join('');return`<tr class="${rowCls?rowCls(i):''}">${c}</tr>`;}).join('');
+  return `<table><thead><tr>${h}</tr></thead><tbody>${r}</tbody></table>`;
+}
+function barCell(v,max){const p=max?Math.max(0,v/max*100):0;return`<div class="bar-cell"><div class="bar-fill" style="width:${p.toFixed(1)}%;"></div><span>${v.toFixed(6)}</span></div>`;}
+const rankCls=i=>i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+const medal=i=>['🥇 ','🥈 ','🥉 '][i]||'';
+function showAlert(id,msg,type){const el=document.getElementById(id);if(!el)return;el.innerHTML=`<div class="alert alert-${type==='ok'?'ok':'warn'}">${msg}</div>`;setTimeout(()=>el.innerHTML='',3500);}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+
+// ═══════ HITUNG SPK ═══════
+function hitungSPK(){
+  const K=DB.get('kriteria'),A=DB.get('alternatif');
+  if(!K.length){alert('Tambah kriteria terlebih dahulu!');return;}
+  if(A.length<2){alert('Minimal 2 alternatif mobil!');return;}
+  const t=K.reduce((s,k)=>s+k.bobot,0);
+  if(Math.abs(t-1)>.005){alert(`Total bobot kriteria harus = 1.00 (sekarang: ${t.toFixed(3)})`);return;}
+  const methods=Object.keys(activeMeth).filter(m=>activeMeth[m]);
+  if(!methods.length){alert('Pilih minimal 1 metode!');return;}
+
+  const X=A.map(a=>K.map(k=>parseFloat(a.nilai[k.id])||0));
+  const results={};
+  const rekHtml=[];
+  const tabBtns=[];
+  const tabPanes=[];
+
+  if(activeMeth.saw)  {results.saw  =hitungSAW(K,A,X);  tabBtns.push({id:'saw',label:'SAW'});     tabPanes.push({id:'saw',html:results.saw.html});}
+  if(activeMeth.wp)   {results.wp   =hitungWP(K,A,X);   tabBtns.push({id:'wp',label:'WP'});       tabPanes.push({id:'wp',html:results.wp.html});}
+  if(activeMeth.smart){results.smart=hitungSMART(K,A,X); tabBtns.push({id:'smart',label:'SMART'}); tabPanes.push({id:'smart',html:results.smart.html});}
+  if(activeMeth.moora){results.moora=hitungMOORA(K,A,X); tabBtns.push({id:'moora',label:'MOORA'}); tabPanes.push({id:'moora',html:results.moora.html});}
+  if(activeMeth.ahp)  {results.ahp  =hitungAHP(K,A,X);  tabBtns.push({id:'ahp',label:'AHP'});     tabPanes.push({id:'ahp',html:results.ahp.html});}
+
+  // Rek grid
+  const rekG=document.getElementById('rek-grid');
+  rekG.innerHTML=methods.map(m=>`
+    <div class="rek-box ${m}">
+      <div class="rek-label">🏆 Terbaik — ${m.toUpperCase()}</div>
+      <div class="rek-name">${results[m].best}</div>
+      <div class="rek-score">Nilai: ${results[m].bestScore}</div>
+    </div>`).join('');
+
+  // Tabs
+  const nav=document.getElementById('result-tab-nav');
+  nav.innerHTML=tabBtns.map((t,i)=>`<button class="tab-btn ${i===0?'active':''}" onclick="showResTab('${t.id}',this)">${t.label}</button>`).join('');
+  const content=document.getElementById('result-tab-content');
+  content.innerHTML=tabPanes.map((p,i)=>`<div class="tab-pane ${i===0?'active':''}" id="rtp-${p.id}">${p.html}</div>`).join('');
+
+  document.getElementById('hasil-section').style.display='block';
+  document.getElementById('hasil-section').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Simpan riwayat
+  const entry={
+    id:uid(),time:now(),
+    label:`Perhitungan ${now()}`,
+    methods,krit:K.length,alt:A.length,
+    results,
+    snapshot:{K:JSON.parse(JSON.stringify(K)),A:JSON.parse(JSON.stringify(A))}
+  };
+  const R=DB.get('riwayat');
+  R.unshift(entry);
+  if(R.length>50)R.pop();
+  DB.set('riwayat',R);
+  addLog('calc',`Perhitungan dijalankan: ${methods.map(m=>m.toUpperCase()).join(', ')} | ${A.length} alternatif | ${K.length} kriteria`);
+}
+
+function showResTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#result-tab-nav .tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('rtp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── SAW ──
+function hitungSAW(K,A,X){
+  const maxv=K.map((_,j)=>Math.max(...X.map(r=>r[j])));
+  const minv=K.map((_,j)=>Math.min(...X.map(r=>r[j])));
+  const R=X.map(row=>row.map((v,j)=>K[j].jenis==='benefit'?(maxv[j]?v/maxv[j]:0):(v?minv[j]/v:0)));
+  const Vi=R.map(row=>row.reduce((s,v,j)=>s+K[j].bobot*v,0));
+  const ranked=A.map((a,i)=>({nama:a.nama,vi:Vi[i]})).sort((a,b)=>b.vi-a.vi);
+  const maxVi=ranked[0].vi;
+  let html=`
+    <div class="card orange"><div class="card-label">SAW Langkah 1</div><div class="card-title">Matriks Keputusan (X)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>`${k.kode}`)],X.map((row,i)=>[A[i].nama,...row.map(v=>v.toLocaleString())]))}</div></div>
+    <div class="card violet"><div class="card-label">SAW Langkah 2</div><div class="card-title">Normalisasi (R)</div>
+    <div class="formula">Benefit: rij = Xij/Max(Xj) &nbsp; Cost: rij = Min(Xj)/Xij</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],R.map((row,i)=>[A[i].nama,...row.map(v=>v.toFixed(6))]))}</div></div>
+    <div class="card yellow"><div class="card-label">SAW Langkah 3</div><div class="card-title">Nilai Preferensi (Vi) = Σ(Wj×rij)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>`W×R(${k.kode})`),'Vi'],
+      R.map((row,i)=>[A[i].nama,...row.map((v,j)=>(K[j].bobot*v).toFixed(5)),`<strong style="color:var(--teal)">${Vi[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card pink"><div class="card-label">SAW Langkah 4</div><div class="card-title">Perangkingan</div>
+    <div class="tbl-wrap">${mkTable(['Rank','Mobil','Nilai Vi','Skor'],ranked.map((r,i)=>[`${medal(i)}#${i+1}`,r.nama,r.vi.toFixed(6),barCell(r.vi,maxVi)]),rankCls)}</div></div>`;
+  return{best:ranked[0].nama,bestScore:ranked[0].vi.toFixed(6),html};
+}
+
+// ── WP ──
+function hitungWP(K,A,X){
+  const Si=X.map(row=>row.reduce((p,v,j)=>{const w=K[j].bobot;return p*(K[j].jenis==='benefit'?Math.pow(v||.0001,w):Math.pow(v||.0001,-w));},1));
+  const sumS=Si.reduce((s,v)=>s+v,0);
+  const Vi=Si.map(s=>sumS?s/sumS:0);
+  const ranked=A.map((a,i)=>({nama:a.nama,si:Si[i],vi:Vi[i]})).sort((a,b)=>b.vi-a.vi);
+  const maxVi=ranked[0].vi;
+  let html=`
+    <div class="card orange"><div class="card-label">WP Langkah 1</div><div class="card-title">Matriks Keputusan (X)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],X.map((row,i)=>[A[i].nama,...row.map(v=>v.toLocaleString())]))}</div></div>
+    <div class="card violet"><div class="card-label">WP Langkah 2</div><div class="card-title">Bobot Kriteria</div>
+    <div class="formula">Wj sudah = 1.00, tidak perlu normalisasi ulang.</div>
+    <div class="tbl-wrap">${mkTable(K.map(k=>k.kode),[K.map(k=>k.bobot.toFixed(3))])}</div></div>
+    <div class="card teal"><div class="card-label">WP Langkah 3</div><div class="card-title">Vektor S = ∏(Xij^Wj)</div>
+    <div class="formula">Benefit: Xij^Wj &nbsp; Cost: Xij^(-Wj)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode),'Si'],
+      X.map((row,i)=>[A[i].nama,...row.map((v,j)=>(K[j].jenis==='benefit'?Math.pow(v||.0001,K[j].bobot):Math.pow(v||.0001,-K[j].bobot)).toFixed(5)),`<strong style="color:var(--teal)">${Si[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card yellow"><div class="card-label">WP Langkah 4</div><div class="card-title">Vektor V = Si/ΣSi</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif','Si','Vi'],A.map((a,i)=>[a.nama,Si[i].toFixed(6),`<strong style="color:var(--teal)">${Vi[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card pink"><div class="card-label">WP Langkah 5</div><div class="card-title">Perangkingan</div>
+    <div class="tbl-wrap">${mkTable(['Rank','Mobil','Nilai Vi','Skor'],ranked.map((r,i)=>[`${medal(i)}#${i+1}`,r.nama,r.vi.toFixed(6),barCell(r.vi,maxVi)]),rankCls)}</div></div>`;
+  return{best:ranked[0].nama,bestScore:ranked[0].vi.toFixed(6),html};
+}
+
+// ── SMART ──
+function hitungSMART(K,A,X){
+  const maxv=K.map((_,j)=>Math.max(...X.map(r=>r[j])));
+  const minv=K.map((_,j)=>Math.min(...X.map(r=>r[j])));
+  const U=X.map(row=>row.map((v,j)=>{const rng=maxv[j]-minv[j];if(!rng)return 0;return K[j].jenis==='benefit'?(v-minv[j])/rng*100:(maxv[j]-v)/rng*100;}));
+  const Vi=U.map(row=>row.reduce((s,u,j)=>s+K[j].bobot*u,0));
+  const ranked=A.map((a,i)=>({nama:a.nama,vi:Vi[i]})).sort((a,b)=>b.vi-a.vi);
+  const maxVi=ranked[0].vi;
+  let html=`
+    <div class="card orange"><div class="card-label">SMART Langkah 1</div><div class="card-title">Matriks Keputusan (X)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],X.map((row,i)=>[A[i].nama,...row.map(v=>v.toLocaleString())]))}</div></div>
+    <div class="card violet"><div class="card-label">SMART Langkah 2</div><div class="card-title">Utility (ui)</div>
+    <div class="formula">Benefit: ui=(Xij-Min)/(Max-Min)×100 &nbsp; Cost: ui=(Max-Xij)/(Max-Min)×100</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],U.map((row,i)=>[A[i].nama,...row.map(v=>v.toFixed(4))]))}</div></div>
+    <div class="card teal"><div class="card-label">SMART Langkah 3</div><div class="card-title">Vi = Σ(Wj×ui)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>`W×u(${k.kode})`),'Vi'],
+      U.map((row,i)=>[A[i].nama,...row.map((u,j)=>(K[j].bobot*u).toFixed(4)),`<strong style="color:var(--teal)">${Vi[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card pink"><div class="card-label">SMART Langkah 4</div><div class="card-title">Perangkingan</div>
+    <div class="tbl-wrap">${mkTable(['Rank','Mobil','Nilai Vi','Skor'],ranked.map((r,i)=>[`${medal(i)}#${i+1}`,r.nama,r.vi.toFixed(6),barCell(r.vi,maxVi)]),rankCls)}</div></div>`;
+  return{best:ranked[0].nama,bestScore:ranked[0].vi.toFixed(6),html};
+}
+
+// ── MOORA ──
+function hitungMOORA(K,A,X){
+  const akar=K.map((_,j)=>Math.sqrt(X.reduce((s,row)=>s+row[j]**2,0)));
+  const Xn=X.map(row=>row.map((v,j)=>akar[j]?v/akar[j]:0));
+  const Yi=Xn.map(row=>row.reduce((s,v,j)=>K[j].jenis==='benefit'?s+K[j].bobot*v:s-K[j].bobot*v,0));
+  const ranked=A.map((a,i)=>({nama:a.nama,yi:Yi[i]})).sort((a,b)=>b.yi-a.yi);
+  const maxYi=ranked[0].yi;
+  let html=`
+    <div class="card orange"><div class="card-label">MOORA Langkah 1</div><div class="card-title">Matriks Keputusan (X)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],X.map((row,i)=>[A[i].nama,...row.map(v=>v.toLocaleString())]))}</div></div>
+    <div class="card violet"><div class="card-label">MOORA Langkah 2</div><div class="card-title">Normalisasi X* = Xij/√(ΣXij²)</div>
+    <div class="formula">X*ij = Xij / √(Σ Xij²)</div>
+    <p class="sec-hdr" style="color:var(--violet)">Akar Jumlah Kuadrat (√ΣX²)</p>
+    <div class="tbl-wrap" style="margin-bottom:12px">${mkTable(K.map(k=>k.kode),[akar.map(v=>v.toFixed(4))])}</div>
+    <p class="sec-hdr" style="color:var(--violet)">Matriks Ternormalisasi (X*)</p>
+    <div class="tbl-wrap">${mkTable(['Alternatif',...K.map(k=>k.kode)],Xn.map((row,i)=>[A[i].nama,...row.map(v=>v.toFixed(6))]))}</div></div>
+    <div class="card yellow"><div class="card-label">MOORA Langkah 3</div><div class="card-title">Nilai Optimasi Yi</div>
+    <div class="formula">Yi = Σ(Wj×X*ij) benefit − Σ(Wj×X*ij) cost</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif','Nilai Yi'],A.map((a,i)=>[a.nama,`<strong style="color:var(--teal)">${Yi[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card pink"><div class="card-label">MOORA Langkah 4</div><div class="card-title">Perangkingan</div>
+    <div class="tbl-wrap">${mkTable(['Rank','Mobil','Nilai Yi','Skor'],ranked.map((r,i)=>[`${medal(i)}#${i+1}`,r.nama,r.yi.toFixed(6),barCell(r.yi,maxYi)]),rankCls)}</div></div>`;
+  return{best:ranked[0].nama,bestScore:ranked[0].yi.toFixed(6),html};
+}
+
+// ── AHP ──
+function hitungAHP(K,A,X){
+  const n=K.length;
+  const m=DB.getObj('ahp-matrix');
+  // Build matrix
+  const mat=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>{
+    if(i===j)return 1;
+    const v=parseFloat(m[`${i}_${j}`]);
+    return isNaN(v)?1:v;
+  }));
+  // Col sums
+  const colSum=Array(n).fill(0);
+  mat.forEach(row=>row.forEach((v,j)=>colSum[j]+=v));
+  // Normalize
+  const normMat=mat.map(row=>row.map((v,j)=>colSum[j]?v/colSum[j]:0));
+  // Priority vector
+  const w=normMat.map(row=>row.reduce((s,v)=>s+v,0)/n);
+  // λmax
+  const Aw=mat.map(row=>row.reduce((s,v,j)=>s+v*w[j],0));
+  const lmax=Aw.reduce((s,v,i)=>s+(w[i]?v/w[i]:0),0)/n;
+  // CI & CR
+  const CI=(lmax-n)/(n-1);
+  const RI=[0,0,0.58,0.9,1.12,1.24,1.32,1.41,1.45,1.49];
+  const ri=RI[n]||1.49;
+  const CR=ri?CI/ri:0;
+  const crOk=CR<0.1;
+  document.getElementById('ahp-cr-result').innerHTML=`<div class="cr-badge ${crOk?'cr-ok':'cr-warn'}">CR = ${CR.toFixed(4)} ${crOk?'✓ Konsisten (CR < 0.1)':'✗ Tidak Konsisten (CR ≥ 0.1, revisi matriks)'}</div>`;
+
+  // Score
+  const Vi=X.map(row=>{
+    const maxv=K.map((_,j)=>Math.max(...X.map(r=>r[j])));
+    const minv=K.map((_,j)=>Math.min(...X.map(r=>r[j])));
+    return row.reduce((s,v,j)=>{
+      const rng=maxv[j]-minv[j];
+      const norm=rng?(K[j].jenis==='benefit'?(v-minv[j])/rng:(maxv[j]-v)/rng):0;
+      return s+w[j]*norm;
+    },0);
+  });
+  const ranked=A.map((a,i)=>({nama:a.nama,vi:Vi[i]})).sort((a,b)=>b.vi-a.vi);
+  const maxVi=ranked[0].vi;
+
+  let html=`
+    <div class="card orange"><div class="card-label">AHP Langkah 1</div><div class="card-title">Matriks Perbandingan Berpasangan</div>
+    <div class="tbl-wrap">${mkTable(['—',...K.map(k=>k.kode)],mat.map((row,i)=>[K[i].kode,...row.map(v=>v.toFixed(4))]))}</div></div>
+    <div class="card violet"><div class="card-label">AHP Langkah 2</div><div class="card-title">Normalisasi & Bobot Prioritas</div>
+    <div class="formula">Normalisasi kolom → rata-rata baris = Priority Weight</div>
+    <div class="tbl-wrap">${mkTable(['Kriteria','Bobot AHP'],K.map((k,i)=>[k.kode+' — '+k.nama,`<strong style="color:var(--teal)">${w[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card blue"><div class="card-label">AHP Langkah 3</div><div class="card-title">Konsistensi</div>
+    <div style="font-size:13px;line-height:1.8;color:var(--muted)">
+      λmax = ${lmax.toFixed(4)} &nbsp;|&nbsp; CI = ${CI.toFixed(4)} &nbsp;|&nbsp; RI = ${ri} &nbsp;|&nbsp; CR = <strong style="color:${crOk?'var(--teal)':'var(--pink)'}">${CR.toFixed(4)}</strong>
+    </div>
+    <div class="cr-badge ${crOk?'cr-ok':'cr-warn'}" style="margin-top:10px">CR ${crOk?'< 0.1 → Konsisten ✓':'≥ 0.1 → Tidak Konsisten ✗'}</div></div>
+    <div class="card yellow"><div class="card-label">AHP Langkah 4</div><div class="card-title">Nilai Alternatif (Bobot AHP × Utility)</div>
+    <div class="tbl-wrap">${mkTable(['Alternatif','Nilai Vi'],A.map((a,i)=>[a.nama,`<strong style="color:var(--teal)">${Vi[i].toFixed(6)}</strong>`]))}</div></div>
+    <div class="card pink"><div class="card-label">AHP Langkah 5</div><div class="card-title">Perangkingan</div>
+    <div class="tbl-wrap">${mkTable(['Rank','Mobil','Nilai Vi','Skor'],ranked.map((r,i)=>[`${medal(i)}#${i+1}`,r.nama,r.vi.toFixed(6),barCell(r.vi,maxVi)]),rankCls)}</div></div>`;
+  return{best:ranked[0].nama,bestScore:ranked[0].vi.toFixed(6),html};
+}
+
+// ═══════ RIWAYAT ═══════
+function renderRiwayat(){
+  const R=DB.get('riwayat');
+  const list=document.getElementById('riwayat-list');
+  if(!R.length){list.innerHTML='<div class="empty"><div class="empty-icon">📊</div>Belum ada riwayat perhitungan.</div>';return;}
+  list.innerHTML=R.map(r=>`
+    <div class="riwayat-item" onclick="openRiwayat('${r.id}')">
+      <div class="riwayat-info">
+        <h4>${r.label}</h4>
+        <p>${r.alt} alternatif · ${r.krit} kriteria</p>
+      </div>
+      <div class="riwayat-meta">
+        <div class="time">${r.time}</div>
+        <div class="methods">${r.methods.map(m=>m.toUpperCase()).join(' · ')}</div>
+      </div>
+    </div>`).join('');
+}
+function openRiwayat(id){
+  const r=DB.get('riwayat').find(x=>x.id===id);
+  if(!r)return;
+  document.getElementById('modal-riwayat-title').textContent=`📊 ${r.label}`;
+  let body=`<p style="color:var(--muted);font-size:12px;margin-bottom:16px">${r.time} · ${r.alt} alternatif · ${r.krit} kriteria · Metode: ${r.methods.map(m=>m.toUpperCase()).join(', ')}</p>`;
+  body+=`<div class="rek-grid">${r.methods.map(m=>`
+    <div class="rek-box ${m}">
+      <div class="rek-label">🏆 ${m.toUpperCase()}</div>
+      <div class="rek-name">${r.results[m].best}</div>
+      <div class="rek-score">${r.results[m].bestScore}</div>
+    </div>`).join('')}</div>`;
+  document.getElementById('modal-riwayat-body').innerHTML=body;
+  document.getElementById('modal-riwayat').classList.add('show');
+}
+function clearRiwayat(){
+  if(!confirm('Hapus semua riwayat hasil perhitungan?'))return;
+  DB.set('riwayat',[]);
+  addLog('delete','Semua riwayat hasil dihapus');
+  renderRiwayat();
+}
+
+// ═══════ LOG ═══════
+function renderLog(){
+  const L=DB.get('logs');
+  const list=document.getElementById('log-list');
+  if(!L.length){list.innerHTML='<div class="empty"><div class="empty-icon">📝</div>Belum ada aktivitas.</div>';return;}
+  list.innerHTML=L.map(l=>`
+    <div class="log-item">
+      <div class="log-dot ${l.type}"></div>
+      <div>
+        <div class="log-text">${l.text}</div>
+        <div class="log-time">${l.time}</div>
+      </div>
+    </div>`).join('');
+}
+function clearLog(){
+  if(!confirm('Hapus semua log aktivitas?'))return;
+  DB.set('logs',[]);
+  renderLog();
+}
+
+// ═══════ INIT ═══════
+renderDashboard();
+</script>
+</body>
+</html>
